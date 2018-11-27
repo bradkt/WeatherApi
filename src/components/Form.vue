@@ -50,7 +50,7 @@ export default {
       minLength: minLength(2)
     }
   },
-  created () {
+  beforeMount () {
     let _this = this;
     eventBus.$on('ResetApp', function () {
       _this.city = '';

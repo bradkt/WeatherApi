@@ -46,6 +46,24 @@ export default {
       _this.shouldDisplayResults = false;
     });
   },
+  computed: {
+    weatherDTO: {
+    // getter
+    get: function () {
+      return this.weatherData
+    },
+    // setter
+    set: function (dto) {
+      this.weatherData =
+        {
+          'Location': dto.name,
+          'Temperature': dto.main.temp,
+          'Humidity': dto.main.humidity,
+          'Conditions': dto.weather[0].description
+        };
+    }
+  }
+  },
   methods: {
     createURL: function (eventData) {
       let FullURL = this.urlBuilder(this.weatherApiURL, eventData.city, eventData.country, 'imperial', apiKey);
@@ -55,13 +73,7 @@ export default {
       let _this = this;
       requesthandler.GET(fullURL)
         .then(function (data) {
-          _this.weatherData =
-        {
-          'Location': data.name,
-          'Temperature': data.main.temp,
-          'Humidity': data.main.humidity,
-          'Conditions': data.weather[0].description
-        };
+          _this.weatherDTO = data;
           _this.shouldDisplayResults = true;
         })
         .catch(function (error) {
@@ -69,6 +81,7 @@ export default {
           console.log(error);
         });
     },
+
     urlBuilder: function (url, city, country, units, key) {
       let safeCity = encodeURI(city);
       let safeCountry = encodeURI(country);

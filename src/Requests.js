@@ -12,7 +12,7 @@ export default {
 };
 
 export let MockData = {
-  GETfake: function (url) {
+  GET: function (url) {
     console.log(url);
     return new Promise(function (resolve) {
       setTimeout(function () {

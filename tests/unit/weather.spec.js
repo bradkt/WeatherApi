@@ -1,7 +1,8 @@
-import { shallowMount } from '@vue/test-utils'
+import { shallowMount, mount } from '@vue/test-utils'
 import Weather from '@/components/Weather.vue'
 import Form from '@/components/Form.vue';
 import Response from '@/components/Response.vue';
+import flushPromises from 'flush-promises'
 import { MockData } from '@/../src/Requests.js';
 import { eventBus } from '@/../src/events.js';
 
@@ -13,13 +14,18 @@ import { eventBus } from '@/../src/events.js';
     });
   
     it('should create a valid api url', () => {
+      // Arrange
       const WeatherWrap = shallowMount(Weather);
       const city = 'Columbus';
       const country = 'USA';
       const key = 'appid=1234567890';
       const url = 'https://www.fakeurl.com';
       const units = 'imperial';
+
+      // Act
       let FullURL = WeatherWrap.vm.urlBuilder(url, city, country, units, key);
+
+      // Assert
       expect(FullURL).toBe('https://www.fakeurl.com?q=Columbus,USA&units=imperial&appid=1234567890');
     });
 
@@ -36,9 +42,13 @@ import { eventBus } from '@/../src/events.js';
 
       // Act
       WeatherWrap.vm.getWeatherData('fakeurl.com', MockData);
+      // await flushPromises();
 
-      // Assert
-      expect(WeatherWrap.vm.weatherData).toEqual(expectedDTO);
+      // Assert after Promise
+      setTimeout(function () {
+        expect(WeatherWrap.vm.weatherDTO).toEqual(expectedDTO);
+      }, 300);
+      
     });
 
   });
@@ -51,9 +61,14 @@ import { eventBus } from '@/../src/events.js';
     });
   
     it('should emit locationData after clicking Get Weather with data', () => {
+      // Arrange
       const FormWrap = shallowMount(Form);
+
+      // Act
       FormWrap.setData({ city: 'Columbus', country: 'USA' });
       FormWrap.find('button').trigger('click');
+
+      // Assert
       expect(FormWrap.emitted()).toEqual({ "locationData": [[{"city": "Columbus", "country": "USA"}]] });
     });
   });
@@ -86,8 +101,13 @@ import { eventBus } from '@/../src/events.js';
 
   describe('events.js', () => {
     it('can emit an event', () => {
+      // Arrange
       const EventWrap = shallowMount(eventBus);
+
+      // Act
       EventWrap.vm.$emit('ResetApp');
+
+      // Assert
       expect(EventWrap.emitted().ResetApp).toBeTruthy()
     });
   });

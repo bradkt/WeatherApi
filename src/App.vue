@@ -33,7 +33,7 @@ export default {
 }
 
 .light-weight {
-  font-weight: bolder;
+  font-weight: lighter;
 }
 
 </style>

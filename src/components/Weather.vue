@@ -9,7 +9,7 @@
           <Form v-on:locationData="createURL($event)"></Form>
         <div class="overlay">
           <Placeholder v-if="!shouldDisplayResults" v-bind:requestHadError="requestHadError"></Placeholder>
-          <Response v-if="shouldDisplayResults" v-bind:weatherData="weatherData"></Response>
+          <Response v-if="shouldDisplayResults" v-bind:weatherData="weatherDTO"></Response>
         </div>
       </div>
     </div>
@@ -48,11 +48,9 @@ export default {
   },
   computed: {
     weatherDTO: {
-    // getter
     get: function () {
       return this.weatherData
     },
-    // setter
     set: function (dto) {
       this.weatherData =
         {
@@ -73,7 +71,7 @@ export default {
       let _this = this;
       requesthandler.GET(fullURL)
         .then(function (data) {
-          _this.weatherDTO = data;
+          console.log('DATA-->', data);
           _this.shouldDisplayResults = true;
         })
         .catch(function (error) {

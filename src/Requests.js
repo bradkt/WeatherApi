@@ -17,7 +17,7 @@ export let MockData = {
     return new Promise(function (resolve) {
       setTimeout(function () {
         resolve(fakeWeatherData);
-      }, 200);
+      }, 190);
     });
   }
 };
